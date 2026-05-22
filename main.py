@@ -1,13 +1,36 @@
-from airports import AIRPORTS
+from locations import get_airport, get_city
+from display import show_banner, show_location, show_menu
 
-airport_key = input("What Airport do you want to query?: ").lower().strip()
 
-if airport_key not in AIRPORTS:
-    raise KeyError(f"Airport not found: {airport_key}")
+show_banner()
+show_menu()
 
-airport = AIRPORTS[airport_key]
+menu_select = input("Select Option: ").strip()
 
-print(f"Airport Name: {airport['name']}")
-print(f"Latitude: {airport['lat']}")
-print(f"Longitude: {airport['lon']}")
-print(f"Radius: {airport['radius_nm']}")
+if menu_select == "1":
+    airport_input = input("What Airport do you want to query?: ").lower().strip()
+    airport = get_airport(airport_input)
+
+    if airport is None:
+        print("Airport not found.")
+    else:
+        show_location(airport)
+
+elif menu_select == "2":
+    city_input = input("What City do you want to query?: ").lower().strip()
+    city = get_city(city_input)
+
+    if city is None:
+        print("City not found.")
+    else:
+        show_location(city)
+
+elif menu_select == "3":
+    coord_input_lat = input("Enter the Latitude (e.g. 40.7128 or -19.6244):")
+    coord_input_lon = input("Enter the Longitude (e.g. 2.3522 or -43.9719):")
+
+    location = get_raw(coord_input_lat, coord_input_lon)
+    show_location(location)
+
+else: 
+    print("Invalid Option")
