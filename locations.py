@@ -3,21 +3,21 @@ AIRPORTS = {
         "name": "Tancredo Neves International Airport [CNF]",
         "lat": -19.6244,
         "lon": -43.9719,
-        "radius_nm": 50,
+        "radius_nm": 100,
         "aliases": ["cnf", "cnfs", "confins"]
     },
     "pampulha": {
         "name": "Pampulha Carlos Drummond de Andrade Airport - [PLU]",
         "lat": -19.8512,
         "lon": -43.9506,
-        "radius_nm": 30,
+        "radius_nm": 100,
         "aliases": ["plu", "pampulha"]
     },
     "guarulhos": {
         "name": "Governor André Franco Montoro International Airport - [GRU]",
         "lat": -23.4356,
         "lon": -46.4731,
-        "radius_nm": 50,
+        "radius_nm": 100,
         "aliases": ["gru", "guarulhos"]
     },
 }
@@ -29,7 +29,7 @@ CITIES = {
         "name": "Belo Horizonte | MG",
         "lat": -19.9167,
         "lon": -43.9345,
-        "radius_nm": 70,
+        "radius_nm": 100,
         "aliases": ["bh", "belo horizonte", "belohorizonte"],
     },
 }
@@ -50,7 +50,7 @@ def get_city(city):
     return None
 
 
-def get_raw(input_lat, input_lon, radius_nm=50):
+def get_raw(input_lat, input_lon, radius_nm=100):
 
     try:
         lat = float(input_lat)
