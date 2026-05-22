@@ -1,36 +1,42 @@
-from locations import get_airport, get_city
+from locations import get_airport, get_city, get_raw
 from display import show_banner, show_location, show_menu
 
+def main():
+    show_banner()
 
-show_banner()
-show_menu()
+    while True:
+        show_menu()
 
-menu_select = input("Select Option: ").strip()
+        menu_select = input("\nSelect Option: ").strip()
 
-if menu_select == "1":
-    airport_input = input("What Airport do you want to query?: ").lower().strip()
-    airport = get_airport(airport_input)
+        if menu_select == "1":
+            airport_input = input("\nWhat Airport do you want to query?: ").lower().strip()
+            location = get_airport(airport_input)
 
-    if airport is None:
-        print("Airport not found.")
-    else:
-        show_location(airport)
+        elif menu_select == "2":
+            city_input = input("\nWhat City do you want to query?: ").lower().strip()
+            location = get_city(city_input)
 
-elif menu_select == "2":
-    city_input = input("What City do you want to query?: ").lower().strip()
-    city = get_city(city_input)
+        elif menu_select == "3":
+            coord_input_lat = input("\nEnter the Latitude: ")
+            coord_input_lon = input("\nEnter the Longitude: ")
+            location = get_raw(coord_input_lat, coord_input_lon)
 
-    if city is None:
-        print("City not found.")
-    else:
-        show_location(city)
+        elif menu_select == "4":
+            print("\nExiting.")
+            break
 
-elif menu_select == "3":
-    coord_input_lat = input("Enter the Latitude (e.g. 40.7128 or -19.6244):")
-    coord_input_lon = input("Enter the Longitude (e.g. 2.3522 or -43.9719):")
+        else:
+            print("\n[ERROR] Invalid option. Please choose 1, 2, 3, or 4.")
+            continue
 
-    location = get_raw(coord_input_lat, coord_input_lon)
-    show_location(location)
+        if location is None:
+            print("\n[ERROR] Location not found.")
+        else:
+            show_location(location)
 
-else: 
-    print("Invalid Option")
+
+
+
+if __name__ == "__main__":
+    main()

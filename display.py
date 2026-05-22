@@ -17,17 +17,23 @@ BANNER = r"""
     |_| \_|\___|\__,_|_|  |_.__/ \__, | |_|   |_|_|\__, |_| |_|\__|___/
                                  |___/             |___/               
                 
-                Aircraft near airports, cities, or coordinates
+             Aircraft near Airports, Cities or Coordinates 
                                      
 """
 
 
 def show_menu():
-    print("""Select Input Type:
+    print("""
+          
+-------------- Menu -----------------
           
 1. Airport
 2. City
-3. Raw Coordinates
+3. Coordinates
+4. Exit
+          
+-------------------------------------
+
           
 """)
 
@@ -35,8 +41,11 @@ def show_banner():
     print(BANNER)
 
 def show_location(location):
-    print(f"Name: {location['name']}")
+    print("\n=======================================================================\n")
+    print(f"{location['name']}\n")
     print(f"Latitude: {location['lat']}")
     print(f"Longitude: {location['lon']}")
     print(f"Radius: {location['radius_nm']} nautical miles")
+    print("\n=======================================================================\n")
+
 

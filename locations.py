@@ -51,6 +51,26 @@ def get_city(city):
 
 
 def get_raw(input_lat, input_lon, radius_nm=50):
+
+    try:
+        lat = float(input_lat)
+        lon = float(input_lon)
+        radius = float(radius_nm)
+    
+    except ValueError:
+        return None
+
+
+    if not -90 <= lat <= 90:
+        return None
+
+    if not -180 <= lon <= 180:
+        return None
+
+    if radius <= 0:
+        return None
+
+
     return {
         "name": "Custom Coordinates",
         "lat": float(input_lat),
