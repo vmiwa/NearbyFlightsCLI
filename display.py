@@ -36,13 +36,14 @@ def show_menu():
 
           
 """)
+    
 
 def show_banner():
     print(BANNER)
 
 def show_location(location):
     print("\n=======================================================================\n")
-    print(f"{location['name']}\n")
+    print(f"{                location['name']}\n")
     print(f"Latitude: {location['lat']}")
     print(f"Longitude: {location['lon']}")
     print(f"Radius: {location['radius_nm']} nautical miles")
