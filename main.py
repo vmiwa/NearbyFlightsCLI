@@ -21,17 +21,17 @@ def main():
         menu_select = input("\nSelect Option: ").strip()
 
         if menu_select == "1":
-            airport_input = input("\nWhat Airport do you want to query?: ").lower().strip()
+            airport_input = input("\nEnter airport code or name (e.g. ATL, GRU, DXB): ").lower().strip()
             location = get_airport(airport_input)
 
         elif menu_select == "2":
-            city_input = input("\nWhat City do you want to query?: ").lower().strip()
+            city_input = input("\nEnter city name or alias (e.g. New York, Tokyo, São Paulo): ").lower().strip()
             location = get_city(city_input)
 
         elif menu_select == "3":
             show_coordinate_help()
-            coord_input_lat = input("\nLatitude  (decimal degrees, e.g. -23.4356): ").strip()
-            coord_input_lon = input("Longitude (decimal degrees, e.g. -46.4731): ").strip()
+            coord_input_lat = input("\nProvide Latitude  (decimal degrees, e.g. -23.4356): ").strip()
+            coord_input_lon = input("Provide Longitude (decimal degrees, e.g. -46.4731): ").strip()
             location = get_raw(coord_input_lat, coord_input_lon)
 
         elif menu_select == "4":
