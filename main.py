@@ -3,6 +3,7 @@ from display import (
     fetch_status,
     show_aircraft_table,
     show_banner,
+    show_coordinate_help,
     show_error,
     show_goodbye,
     show_location,
@@ -28,8 +29,9 @@ def main():
             location = get_city(city_input)
 
         elif menu_select == "3":
-            coord_input_lat = input("\nEnter the Latitude: ")
-            coord_input_lon = input("\nEnter the Longitude: ")
+            show_coordinate_help()
+            coord_input_lat = input("\nLatitude  (decimal degrees, e.g. -23.4356): ").strip()
+            coord_input_lon = input("Longitude (decimal degrees, e.g. -46.4731): ").strip()
             location = get_raw(coord_input_lat, coord_input_lon)
 
         elif menu_select == "4":
@@ -41,7 +43,12 @@ def main():
             continue
 
         if location is None:
-            show_error("Location not found.")
+            if menu_select == "3":
+                show_error(
+                    "Invalid coordinates. Use decimal degrees like -23.4356 and -46.4731."
+                )
+            else:
+                show_error("Location not found.")
         else:
             show_location(location)
             with fetch_status(location):

@@ -1,3 +1,6 @@
+import unicodedata
+
+
 DEFAULT_RADIUS_NM = 100
 
 
@@ -519,20 +522,27 @@ CITIES = {
 }
 
 
+def normalize_lookup(value):
+    normalized = unicodedata.normalize("NFKD", value.casefold().strip())
+    return "".join(char for char in normalized if not unicodedata.combining(char))
+
+
 def get_airport(airport):
-    airport = airport.lower().strip()
+    airport = normalize_lookup(airport)
 
     for airport_data in AIRPORTS.values():
-        if airport in airport_data["aliases"]:
+        aliases = [normalize_lookup(alias) for alias in airport_data["aliases"]]
+        if airport in aliases:
             return airport_data
     return None
 
 
 def get_city(city):
-    city = city.lower().strip()
+    city = normalize_lookup(city)
 
     for city_data in CITIES.values():
-        if city in city_data["aliases"]:
+        aliases = [normalize_lookup(alias) for alias in city_data["aliases"]]
+        if city in aliases:
             return city_data
     return None
 

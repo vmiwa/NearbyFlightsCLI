@@ -1,4 +1,5 @@
 from rich import box
+from rich.align import Align
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
@@ -7,21 +8,21 @@ from rich.text import Text
 
 console = Console()
 
-BANNER = r"""
-      __|__
---@--@--(_)--@--@--
-
-Nearby Flights
-Aircraft near airports, cities, or coordinates
-"""
-
 
 def show_banner():
+    banner = Table.grid(expand=False)
+    banner.add_column(justify="center")
+    banner.add_row(Text("NEARBY FLIGHTS", style="bold white"))
+    banner.add_row(Text("Aircraft near airports, cities, or coordinates", style="bright_black"))
+
     console.print(
-        Panel.fit(
-            Text(BANNER.strip("\n"), style="bold cyan"),
-            border_style="cyan",
-            padding=(1, 4),
+        Align.center(
+            Panel.fit(
+                banner,
+                title="[cyan]ADS-B[/cyan]",
+                border_style="bright_black",
+                padding=(1, 4),
+            )
         )
     )
 
@@ -40,7 +41,31 @@ def show_menu():
     )
 
     console.print()
-    console.print(Panel(menu, title="Menu", border_style="bright_black", box=box.ROUNDED))
+    console.print(
+        Align.center(
+            Panel.fit(menu, title="Menu", border_style="bright_black", box=box.ROUNDED)
+        )
+    )
+
+
+def show_coordinate_help():
+    details = Table.grid(padding=(0, 2))
+    details.add_column(style="bright_black")
+    details.add_column(style="white")
+    details.add_row("Format", "Decimal degrees, using a dot")
+    details.add_row("Latitude", "-90 to 90, example: -23.4356")
+    details.add_row("Longitude", "-180 to 180, example: -46.4731")
+    details.add_row("Tip", "South and West use negative numbers")
+
+    console.print()
+    console.print(
+        Panel(
+            details,
+            title="[bold]Custom Coordinates[/bold]",
+            border_style="cyan",
+            box=box.ROUNDED,
+        )
+    )
 
 
 def show_location(location):
@@ -65,19 +90,20 @@ def show_location(location):
 def show_aircraft_table(aircraft_list):
     table = Table(
         title="Nearby Aircraft",
+        caption="Alt m | Speed km/h | Distance km | V/S vertical speed",
         box=box.SIMPLE_HEAVY,
         header_style="bold cyan",
         title_style="bold",
+        caption_style="bright_black",
         show_lines=False,
     )
-    table.add_column("Call", style="bold white", no_wrap=True, max_width=8)
+    table.add_column("Flight", style="bold white", no_wrap=True, max_width=8)
     table.add_column("Type", style="magenta", no_wrap=True, max_width=4)
     table.add_column("Reg", style="blue", no_wrap=True, max_width=7)
-    table.add_column("ft", justify="right", no_wrap=True)
-    table.add_column("m", justify="right", no_wrap=True)
-    table.add_column("km/h", justify="right", no_wrap=True)
+    table.add_column("Alt m", justify="right", no_wrap=True)
+    table.add_column("Spd", justify="right", no_wrap=True)
     table.add_column("V/S", justify="right", no_wrap=True)
-    table.add_column("km", justify="right", no_wrap=True)
+    table.add_column("Dist", justify="right", no_wrap=True)
     table.add_column("Seen", justify="right", no_wrap=True)
 
     for aircraft in sorted(aircraft_list, key=distance_sort_key):
@@ -85,7 +111,6 @@ def show_aircraft_table(aircraft_list):
             format_value(aircraft["flight"]),
             format_value(aircraft["type"]),
             format_value(aircraft["reg"]),
-            format_number_value(aircraft["altitude_ft"]),
             format_number_value(aircraft["altitude_m"]),
             format_number_value(aircraft["speed_kmh"]),
             format_vertical_rate(aircraft["vertical_rate"]),
@@ -94,7 +119,7 @@ def show_aircraft_table(aircraft_list):
         )
 
     console.print()
-    console.print(table)
+    console.print(Align.center(table))
 
 
 def show_error(message):
@@ -157,9 +182,9 @@ def format_vertical_rate(rate):
         return "[bright_black]N/A[/bright_black]"
 
     if rate > 0:
-        return f"[green]up {format_number(rate)}[/green]"
+        return f"[green]↑{format_number(rate)}[/green]"
 
     if rate < 0:
-        return f"[red]down {format_number(abs(rate))}[/red]"
+        return f"[red]↓{format_number(abs(rate))}[/red]"
 
     return "[bright_black]level[/bright_black]"
