@@ -1,96 +1,165 @@
-BANNER = r"""
-                                       |
-                                       |
-                                       |
-                                     .-'-.
-                                    ' ___ '
-                          ---------'  .-.  '---------
-          _________________________'  '-'  '_________________________
-           ''''''-|---|--/    \==][^',_m_,'^][==/    \--|---|-''''''
-                         \    /  ||/   H   \||  \    /
-                          '--'   OO   O|O   OO   '--'
+from rich import box
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.text import Text
 
-     _   _                 _             _____ _ _       _     _       
-    | \ | | ___  __ _ _ __| |__  _   _  |  ___| (_) __ _| |__ | |_ ___ 
-    |  \| |/ _ \/ _` | '__| '_ \| | | | | |_  | | |/ _` | '_ \| __/ __|
-    | |\  |  __/ (_| | |  | |_) | |_| | |  _| | | | (_| | | | | |_\__ \
-    |_| \_|\___|\__,_|_|  |_.__/ \__, | |_|   |_|_|\__, |_| |_|\__|___/
-                                 |___/             |___/               
-                
-             Aircraft near Airports, Cities or Coordinates 
-                                     
+
+console = Console()
+
+BANNER = r"""
+      __|__
+--@--@--(_)--@--@--
+
+Nearby Flights
+Aircraft near airports, cities, or coordinates
 """
 
 
-def show_menu():
-    print("""
-          
--------------- Menu -----------------
-          
-1. Airport
-2. City
-3. Coordinates
-4. Exit
-          
--------------------------------------
-
-          
-""")
-    
-
 def show_banner():
-    print(BANNER)
+    console.print(
+        Panel.fit(
+            Text(BANNER.strip("\n"), style="bold cyan"),
+            border_style="cyan",
+            padding=(1, 4),
+        )
+    )
+
+
+def show_menu():
+    menu = Table.grid(expand=False, padding=(0, 4))
+    menu.add_column(justify="left")
+    menu.add_column(justify="left")
+    menu.add_column(justify="left")
+    menu.add_column(justify="left")
+    menu.add_row(
+        "[bold cyan][1][/bold cyan] Airport",
+        "[bold cyan][2][/bold cyan] City",
+        "[bold cyan][3][/bold cyan] Coordinates",
+        "[bold cyan][4][/bold cyan] Exit",
+    )
+
+    console.print()
+    console.print(Panel(menu, title="Menu", border_style="bright_black", box=box.ROUNDED))
 
 
 def show_location(location):
-    print("\n=======================================================================\n")
-    print(f"                   {location['name']}\n")
-    print(f"Latitude: {location['lat']}")
-    print(f"Longitude: {location['lon']}")
-    print(f"Radius: {location['radius_nm']} nautical miles")
-    print("\n=======================================================================\n")
+    details = Table.grid(padding=(0, 3))
+    details.add_column(style="bright_black")
+    details.add_column(style="white")
+    details.add_row("Latitude", format_number(location["lat"], 4))
+    details.add_row("Longitude", format_number(location["lon"], 4))
+    details.add_row("Radius", f"{format_number(location['radius_nm'])} nm")
 
+    console.print()
+    console.print(
+        Panel(
+            details,
+            title=f"[bold]{location['name']}[/bold]",
+            border_style="cyan",
+            box=box.ROUNDED,
+        )
+    )
 
 
 def show_aircraft_table(aircraft_list):
-    print("\nNearby Aircraft\n")
-    print(f"{'Callsign':<10} {'Type':<6} {'Reg':<10} {'Alt(ft)':>8} {'Alt(m)':>8} {'Speed(km/h)':>12} {'Vert':>10} {'Dist(km)':>10} {'Seen':>10}")
-    print("-" * 92)
+    table = Table(
+        title="Nearby Aircraft",
+        box=box.SIMPLE_HEAVY,
+        header_style="bold cyan",
+        title_style="bold",
+        show_lines=False,
+    )
+    table.add_column("Call", style="bold white", no_wrap=True, max_width=8)
+    table.add_column("Type", style="magenta", no_wrap=True, max_width=4)
+    table.add_column("Reg", style="blue", no_wrap=True, max_width=7)
+    table.add_column("ft", justify="right", no_wrap=True)
+    table.add_column("m", justify="right", no_wrap=True)
+    table.add_column("km/h", justify="right", no_wrap=True)
+    table.add_column("V/S", justify="right", no_wrap=True)
+    table.add_column("km", justify="right", no_wrap=True)
+    table.add_column("Seen", justify="right", no_wrap=True)
 
-    for aircraft in aircraft_list:
-        flight = format_value(aircraft["flight"])
-        aircraft_type = format_value(aircraft["type"])
-        reg = format_value(aircraft["reg"])
-        altitude_ft = format_value(aircraft["altitude_ft"])
-        altitude_m = format_value(aircraft["altitude_m"])
-        speed_kmh = format_value(aircraft["speed_kmh"])
-        vertical_rate = format_vertical_rate(aircraft["vertical_rate"])
-        distance_km = format_value(aircraft["distance_km"])
+    for aircraft in sorted(aircraft_list, key=distance_sort_key):
+        table.add_row(
+            format_value(aircraft["flight"]),
+            format_value(aircraft["type"]),
+            format_value(aircraft["reg"]),
+            format_number_value(aircraft["altitude_ft"]),
+            format_number_value(aircraft["altitude_m"]),
+            format_number_value(aircraft["speed_kmh"]),
+            format_vertical_rate(aircraft["vertical_rate"]),
+            format_number_value(aircraft["distance_km"], decimals=1),
+            format_seen(aircraft["seen"]),
+        )
 
-        if aircraft["seen"] is None:
-            seen = "N/A"
-        else:
-            seen = f"{round(aircraft['seen'], 1)}s ago"
+    console.print()
+    console.print(table)
 
-        print(f"{flight:<10} {aircraft_type:<6} {reg:<10} {altitude_ft:>8} {altitude_m:>8} {speed_kmh:>12} {vertical_rate:>10} {distance_km:>10} {seen:>10}")
-    print()
 
+def show_error(message):
+    console.print(f"\n[bold red]Error:[/bold red] {message}")
+
+
+def show_warning(message):
+    console.print(f"\n[bold yellow]Warning:[/bold yellow] {message}")
+
+
+def show_goodbye():
+    console.print("\n[cyan]Goodbye.[/cyan]")
+
+
+def fetch_status(location):
+    return console.status(
+        f"[cyan]Querying ADS-B data near {location['name']}...[/cyan]",
+        spinner="dots",
+    )
+
+
+def distance_sort_key(aircraft):
+    distance = aircraft["distance_km"]
+    if distance is None:
+        return float("inf")
+    return distance
 
 
 def format_value(value):
-    if value is None:
-        return "N/A"
+    if value is None or value == "":
+        return "[bright_black]N/A[/bright_black]"
 
     return str(value)
 
+
+def format_number_value(value, decimals=0):
+    if value is None:
+        return "[bright_black]N/A[/bright_black]"
+
+    return format_number(value, decimals)
+
+
+def format_number(value, decimals=0):
+    if decimals == 0:
+        return f"{round(value):,}"
+
+    return f"{value:,.{decimals}f}"
+
+
+def format_seen(seen):
+    if seen is None:
+        return "[bright_black]N/A[/bright_black]"
+
+    style = "green" if seen <= 10 else "yellow" if seen <= 30 else "red"
+    return f"[{style}]{seen:.1f}s[/{style}]"
+
+
 def format_vertical_rate(rate):
     if rate is None:
-        return "N/A"
+        return "[bright_black]N/A[/bright_black]"
 
     if rate > 0:
-        return f"↑{rate}"
+        return f"[green]up {format_number(rate)}[/green]"
 
     if rate < 0:
-        return f"↓{abs(rate)}"
+        return f"[red]down {format_number(abs(rate))}[/red]"
 
-    return "level"
+    return "[bright_black]level[/bright_black]"

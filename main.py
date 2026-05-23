@@ -1,5 +1,14 @@
 from locations import get_airport, get_city, get_raw
-from display import show_banner, show_location, show_menu, show_aircraft_table
+from display import (
+    fetch_status,
+    show_aircraft_table,
+    show_banner,
+    show_error,
+    show_goodbye,
+    show_location,
+    show_menu,
+    show_warning,
+)
 from adsb_client import get_nearby_aircraft
 
 def main():
@@ -24,23 +33,24 @@ def main():
             location = get_raw(coord_input_lat, coord_input_lon)
 
         elif menu_select == "4":
-            print("\nExiting.")
+            show_goodbye()
             break
 
         else:
-            print("\n[ERROR] Invalid option. Please choose 1, 2, 3, or 4.")
+            show_error("Invalid option. Please choose 1, 2, 3, or 4.")
             continue
 
         if location is None:
-            print("\n[ERROR] Location not found.")
+            show_error("Location not found.")
         else:
             show_location(location)
-            aircraft_list = get_nearby_aircraft(location)
+            with fetch_status(location):
+                aircraft_list = get_nearby_aircraft(location)
 
             if aircraft_list is None:
-                print("\n[ERROR] Could not reach ADS-B API.")
+                show_error("Could not reach ADS-B API.")
             elif len(aircraft_list) == 0:
-                print("\nNo aircraft found nearby.")
+                show_warning("No aircraft found nearby.")
             else:
                 show_aircraft_table(aircraft_list)
 
