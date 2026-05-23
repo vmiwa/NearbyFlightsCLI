@@ -190,6 +190,13 @@ AIRPORTS = {
         "radius_nm": DEFAULT_RADIUS_NM,
         "aliases": ["lax", "los angeles", "la"],
     },
+    "jfk": {
+        "name": "John F. Kennedy International Airport [JFK]",
+        "lat": 40.6413,
+        "lon": -73.7781,
+        "radius_nm": DEFAULT_RADIUS_NM,
+        "aliases": ["jfk", "new york", "nyc", "john f kennedy", "kennedy"],
+    },
     # Europe
     "lhr": {
         "name": "London Heathrow Airport [LHR]",
@@ -269,7 +276,7 @@ CITIES = {
     # Brazil
     "sao_paulo": {
         "type": "city",
-        "name": "Sao Paulo | SP",
+        "name": "Sao Paulo | Brazil",
         "lat": -23.5505,
         "lon": -46.6333,
         "radius_nm": DEFAULT_RADIUS_NM,
@@ -277,7 +284,7 @@ CITIES = {
     },
     "rio_de_janeiro": {
         "type": "city",
-        "name": "Rio de Janeiro | RJ",
+        "name": "Rio de Janeiro | Brazil",
         "lat": -22.9068,
         "lon": -43.1729,
         "radius_nm": DEFAULT_RADIUS_NM,
@@ -285,7 +292,7 @@ CITIES = {
     },
     "brasilia": {
         "type": "city",
-        "name": "Brasilia | DF",
+        "name": "Brasilia | Brazil",
         "lat": -15.7939,
         "lon": -47.8828,
         "radius_nm": DEFAULT_RADIUS_NM,
@@ -293,7 +300,7 @@ CITIES = {
     },
     "belo_horizonte": {
         "type": "city",
-        "name": "Belo Horizonte | MG",
+        "name": "Belo Horizonte | Brazil",
         "lat": -19.9167,
         "lon": -43.9345,
         "radius_nm": DEFAULT_RADIUS_NM,
@@ -301,7 +308,7 @@ CITIES = {
     },
     "vespasiano": {
         "type": "city",
-        "name": "Vespasiano | MG",
+        "name": "Vespasiano | Brazil",
         "lat": -19.6919,
         "lon": -43.9233,
         "radius_nm": DEFAULT_RADIUS_NM,
@@ -309,7 +316,7 @@ CITIES = {
     },
     "campinas": {
         "type": "city",
-        "name": "Campinas | SP",
+        "name": "Campinas | Brazil",
         "lat": -22.9099,
         "lon": -47.0626,
         "radius_nm": DEFAULT_RADIUS_NM,
@@ -317,7 +324,7 @@ CITIES = {
     },
     "recife": {
         "type": "city",
-        "name": "Recife | PE",
+        "name": "Recife | Brazil",
         "lat": -8.0476,
         "lon": -34.8770,
         "radius_nm": DEFAULT_RADIUS_NM,
@@ -325,7 +332,7 @@ CITIES = {
     },
     "salvador": {
         "type": "city",
-        "name": "Salvador | BA",
+        "name": "Salvador | Brazil",
         "lat": -12.9777,
         "lon": -38.5016,
         "radius_nm": DEFAULT_RADIUS_NM,
@@ -333,7 +340,7 @@ CITIES = {
     },
     "curitiba": {
         "type": "city",
-        "name": "Curitiba | PR",
+        "name": "Curitiba | Brazil",
         "lat": -25.4284,
         "lon": -49.2733,
         "radius_nm": DEFAULT_RADIUS_NM,
@@ -341,7 +348,7 @@ CITIES = {
     },
     "porto_alegre": {
         "type": "city",
-        "name": "Porto Alegre | RS",
+        "name": "Porto Alegre | Brazil",
         "lat": -30.0346,
         "lon": -51.2177,
         "radius_nm": DEFAULT_RADIUS_NM,
@@ -349,7 +356,7 @@ CITIES = {
     },
     "fortaleza": {
         "type": "city",
-        "name": "Fortaleza | CE",
+        "name": "Fortaleza | Brazil",
         "lat": -3.7319,
         "lon": -38.5267,
         "radius_nm": DEFAULT_RADIUS_NM,
@@ -399,7 +406,7 @@ CITIES = {
     # United States
     "atlanta": {
         "type": "city",
-        "name": "Atlanta | GA",
+        "name": "Atlanta | United States",
         "lat": 33.7490,
         "lon": -84.3880,
         "radius_nm": DEFAULT_RADIUS_NM,
@@ -407,7 +414,7 @@ CITIES = {
     },
     "dallas": {
         "type": "city",
-        "name": "Dallas-Fort Worth | TX",
+        "name": "Dallas-Fort Worth | United States",
         "lat": 32.7767,
         "lon": -96.7970,
         "radius_nm": DEFAULT_RADIUS_NM,
@@ -415,7 +422,7 @@ CITIES = {
     },
     "denver": {
         "type": "city",
-        "name": "Denver | CO",
+        "name": "Denver | United States",
         "lat": 39.7392,
         "lon": -104.9903,
         "radius_nm": DEFAULT_RADIUS_NM,
@@ -423,7 +430,7 @@ CITIES = {
     },
     "chicago": {
         "type": "city",
-        "name": "Chicago | IL",
+        "name": "Chicago | United States",
         "lat": 41.8781,
         "lon": -87.6298,
         "radius_nm": DEFAULT_RADIUS_NM,
@@ -431,11 +438,19 @@ CITIES = {
     },
     "los_angeles": {
         "type": "city",
-        "name": "Los Angeles | CA",
+        "name": "Los Angeles | United States",
         "lat": 34.0522,
         "lon": -118.2437,
         "radius_nm": DEFAULT_RADIUS_NM,
         "aliases": ["los angeles", "la", "lax"],
+    },
+    "new_york": {
+        "type": "city",
+        "name": "New York | United States",
+        "lat": 40.7128,
+        "lon": -74.0060,
+        "radius_nm": DEFAULT_RADIUS_NM,
+        "aliases": ["new york", "nyc", "ny"],
     },
     # Europe
     "london": {
