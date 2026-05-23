@@ -1,5 +1,6 @@
 from locations import get_airport, get_city, get_raw
-from display import show_banner, show_location, show_menu
+from display import show_banner, show_location, show_menu, show_aircraft_table
+from adsb_client import get_nearby_aircraft
 
 def main():
     show_banner()
@@ -34,7 +35,14 @@ def main():
             print("\n[ERROR] Location not found.")
         else:
             show_location(location)
+            aircraft_list = get_nearby_aircraft(location)
 
+            if aircraft_list is None:
+                print("\n[ERROR] Could not reach ADS-B API.")
+            elif len(aircraft_list) == 0:
+                print("\nNo aircraft found nearby.")
+            else:
+                show_aircraft_table(aircraft_list)
 
 
 

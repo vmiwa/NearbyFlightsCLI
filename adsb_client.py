@@ -69,10 +69,8 @@ def knots_to_kmh(knots):
     return knots * 1.852
 
 
-
 def feet_to_meters(feet):
     return feet * 0.3048
-
 
 
 def nautical_miles_to_km(nm):
