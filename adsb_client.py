@@ -28,9 +28,9 @@ def get_nearby_aircraft(location):
     return simplified_aircraft_list
 
 def normalize_aircraft(raw_aircraft):
-    altitude_ft = raw_aircraft.get("alt_baro")
-    speed_knots = raw_aircraft.get("gs")
-    distance_nm = raw_aircraft.get("dst")
+    altitude_ft = to_number(raw_aircraft.get("alt_baro"), ground_value=0)
+    speed_knots = to_number(raw_aircraft.get("gs"))
+    distance_nm = to_number(raw_aircraft.get("dst"))
     flight = raw_aircraft.get("flight")
 
     if altitude_ft is None:
@@ -59,10 +59,26 @@ def normalize_aircraft(raw_aircraft):
         "altitude_ft": altitude_ft,
         "altitude_m": altitude_m,
         "speed_kmh": speed_kmh,
-        "vertical_rate": raw_aircraft.get("baro_rate"),         
+        "vertical_rate": to_number(raw_aircraft.get("baro_rate")),
         "distance_km": distance_km,
-        "seen": raw_aircraft.get("seen"),
+        "seen": to_number(raw_aircraft.get("seen")),
     }
+
+
+def to_number(value, ground_value=None):
+    if value is None:
+        return None
+
+    if isinstance(value, (int, float)):
+        return value
+
+    if isinstance(value, str) and value.casefold().strip() == "ground":
+        return ground_value
+
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
 
 
 def knots_to_kmh(knots):
